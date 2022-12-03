@@ -5,7 +5,7 @@ C Z
 ";
 
 pub const TEST_RESULT_PART1: i32 = 15;
-pub const TEST_RESULT_PART2: i32 = 0;
+pub const TEST_RESULT_PART2: i32 = 12;
 
 pub const PUZZLE_INPUT: &str = "\
 A Y

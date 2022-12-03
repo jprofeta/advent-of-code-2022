@@ -14,6 +14,7 @@ pub fn main() {
     let day = args[1].parse::<i32>().unwrap();
     match day {
         1 => puzzles::day01::main(),
+        2 => puzzles::day02::main(),
         _ => println!("Undefined day")
     }
 }

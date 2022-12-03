@@ -26,8 +26,8 @@ if [[ "$ACTION" == "create" ]]; then
 		sed -i -s -r "s/\\{\\{day\\}\\}/${DAY}/" "puzzles/day${DAY}.rs" "puzzles/day${DAY}_input.rs"
 		sed -i -s -r "s/\\{\\{topic\\}\\}/${TOPIC}/" "puzzles/day${DAY}.rs" "puzzles/day${DAY}_input.rs"
 
-		echo "pub mod day${DAY}" >> puzzles.rs
-		echo "pub mod day${DAY}_input" >> puzzles.rs
+		echo "pub mod day${DAY};" >> puzzles.rs
+		echo "pub mod day${DAY}_input;" >> puzzles.rs
 		echo "" >> puzzles.rs
 
 		echo "Created files for day ${DAY} - ${TOPIC}."
