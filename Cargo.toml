@@ -1,0 +1,12 @@
+[package]
+name = "advent_of_code_2022"
+version = "1.0.0"
+edition = "2021"
+include = [ "puzzles/day*.rs" ]
+
+[[bin]]
+name = "aoc2022"
+path = "main.rs"
+
+#[dependencies]
+#ndarray = ">=0.15.6"
