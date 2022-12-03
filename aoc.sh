@@ -16,7 +16,7 @@ if [[ "$ACTION" == "create" ]]; then
 		echo "No topic provided."
 		exit 1
 	fi
-	if [ -f "day${DAY}.rs" ]; then
+	if [ -f "puzzles/day${DAY}.rs" ]; then
 		echo "Day already exists."
 		exit 1
 	else

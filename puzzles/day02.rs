@@ -155,6 +155,8 @@ fn score_part2(a: &InValue, b: &OutValue) -> i32 {
         // Tie
         OutValue::Y => _a + 3,
         // Win
+        // There is an implicit _a + 1 because _a is 1 based. This removes the need to -1 then +1 to rebase it
+        // for the modulus.
         OutValue::Z => _a % 3 + 1 + 6
     }
 }
