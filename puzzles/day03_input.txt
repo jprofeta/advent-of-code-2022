@@ -1,16 +1,3 @@
-pub const TEST_INPUT: &str = "\
-vJrwpWtwJgWrhcsFMMfFFhFp
-jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
-PmmdzqPrVvPwwTWBwg
-wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
-ttgJtRGJQctTZtZT
-CrZsJsPPZsGzwwsLwLmpwMDw
-";
-
-pub const TEST_RESULT_PART1: i32 = 157;
-pub const TEST_RESULT_PART2: i32 = 70;
-
-pub const PUZZLE_INPUT: &str = "\
 hqBqJsqHhHvhHHqlBvlfpHQQwLVzVwtVzjzttjQVSjMjwL
 gRTRnCRsFNGbTzLjwcSTMmSz
 dGgsRWPGdWgZJqBBqhfpPq
@@ -311,4 +298,3 @@ rvJBbbBNcLCtJZQL
 NfLlqLhbNPddLPqLhpgHwFFwFHHTwRHWwPFTrT
 MSMSCnjBnBjCscjVDVljTvHmmWnrwTrwFTrvTWTT
 JCMMBzDMJcZZCjDzSBDNJgdfdQlqlLNdhgGLhp
-";

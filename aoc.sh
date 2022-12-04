@@ -27,15 +27,12 @@ if [[ "$ACTION" == "create" ]]; then
 		exit 1
 	else
 		cp $TEMPLATE "puzzles/day${DAY}.rs"
-		cp $INPUT_TEMPLATE "puzzles/day${DAY}_input.rs"
 
-		sed -i -s -r "s/\\{\\{day\\}\\}/${DAY}/" "puzzles/day${DAY}.rs" "puzzles/day${DAY}_input.rs"
-		sed -i -s -r "s/\\{\\{topic\\}\\}/${TOPIC}/" "puzzles/day${DAY}.rs" "puzzles/day${DAY}_input.rs"
+		sed -i -s -r "s/\\{\\{day\\}\\}/${DAY}/" "puzzles/day${DAY}.rs"
+		sed -i -s -r "s/\\{\\{topic\\}\\}/${TOPIC}/" "puzzles/day${DAY}.rs"
 		sed -i -s -r "s/(\\s+)\\/\\/ \\{\\{new_day\\}\\}/\\1${DAY_NO_LEADING} => puzzles::day${DAY}::main(),\\n\\0/" "main.rs"
 
 		echo "pub mod day${DAY};" >> puzzles.rs
-		echo "pub mod day${DAY}_input;" >> puzzles.rs
-		echo "" >> puzzles.rs
 
 		echo "Created files for day ${DAY} - ${TOPIC}."
 	fi

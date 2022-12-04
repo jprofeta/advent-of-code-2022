@@ -8,7 +8,18 @@ use std::str::FromStr;
 use std::convert::TryInto;
 
 use crate::dbgprint;
-use crate::puzzles::day04_input;
+
+pub const TEST_INPUT: &str = "\
+2-4,6-8
+2-3,4-5
+5-7,7-9
+2-8,3-7
+6-6,4-6
+2-6,4-8
+";
+
+pub const TEST_RESULT_PART1: i32 = 2;
+pub const TEST_RESULT_PART2: i32 = 4;
 
 #[derive(Debug)]
 struct Pair {
@@ -45,13 +56,13 @@ pub fn main() {
     println!("======");
     println!();
 
-    let puzzle_test_out1 = do_part1(day04_input::TEST_INPUT.parse::<Input>().unwrap());
-    println!("Test output: {} (expected {})", puzzle_test_out1, day04_input::TEST_RESULT_PART1);
-    assert_eq!(day04_input::TEST_RESULT_PART1, puzzle_test_out1);
+    let puzzle_test_out1 = do_part1(TEST_INPUT.parse::<Input>().unwrap());
+    println!("Test output: {} (expected {})", puzzle_test_out1, TEST_RESULT_PART1);
+    assert_eq!(TEST_RESULT_PART1, puzzle_test_out1);
 
     println!();
     println!("Running puzzle input...");
-    let puzzle_out1 = do_part1(day04_input::PUZZLE_INPUT.parse::<Input>().unwrap());
+    let puzzle_out1 = do_part1(std::fs::read_to_string("puzzles/day04_input.txt").unwrap().parse::<Input>().unwrap());
     println!("Puzzle result: {}", puzzle_out1);
     println!();
 
@@ -59,13 +70,13 @@ pub fn main() {
     println!("======");
     println!();
 
-    let test_out2 = do_part2(day04_input::TEST_INPUT.parse::<Input>().unwrap());
-    println!("Test output: {} (expected {})", test_out2, day04_input::TEST_RESULT_PART2);
-    assert_eq!(day04_input::TEST_RESULT_PART2, test_out2);
+    let test_out2 = do_part2(TEST_INPUT.parse::<Input>().unwrap());
+    println!("Test output: {} (expected {})", test_out2, TEST_RESULT_PART2);
+    assert_eq!(TEST_RESULT_PART2, test_out2);
 
     println!();
     println!("Running puzzle input...");
-    let puzzle_out2 = do_part2(day04_input::PUZZLE_INPUT.parse::<Input>().unwrap());
+    let puzzle_out2 = do_part2(std::fs::read_to_string("puzzles/day04_input.txt").unwrap().parse::<Input>().unwrap());
     println!("Puzzle result: {}", puzzle_out2);
     println!();
 }

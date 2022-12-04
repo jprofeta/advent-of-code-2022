@@ -10,7 +10,18 @@ use std::convert::TryInto;
 use std::collections::HashSet;
 
 use crate::dbgprint;
-use crate::puzzles::day03_input;
+
+pub const TEST_INPUT: &str = "\
+vJrwpWtwJgWrhcsFMMfFFhFp
+jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+PmmdzqPrVvPwwTWBwg
+wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+ttgJtRGJQctTZtZT
+CrZsJsPPZsGzwwsLwLmpwMDw
+";
+
+pub const TEST_RESULT_PART1: i32 = 157;
+pub const TEST_RESULT_PART2: i32 = 70;
 
 #[derive(Debug)]
 struct Input { rucksacks: Vec<String> }
@@ -36,13 +47,13 @@ pub fn main() {
     println!("======");
     println!();
 
-    let puzzle_test_out1 = do_part1(day03_input::TEST_INPUT.parse::<Input>().unwrap());
-    println!("Test output: {} (expected {})", puzzle_test_out1, day03_input::TEST_RESULT_PART1);
-    assert_eq!(day03_input::TEST_RESULT_PART1, puzzle_test_out1);
+    let puzzle_test_out1 = do_part1(TEST_INPUT.parse::<Input>().unwrap());
+    println!("Test output: {} (expected {})", puzzle_test_out1, TEST_RESULT_PART1);
+    assert_eq!(TEST_RESULT_PART1, puzzle_test_out1);
 
     println!();
     println!("Running puzzle input...");
-    let puzzle_out1 = do_part1(day03_input::PUZZLE_INPUT.parse::<Input>().unwrap());
+    let puzzle_out1 = do_part1(std::fs::read_to_string("puzzles/day03_input.txt").unwrap().parse::<Input>().unwrap());
     println!("Puzzle result: {}", puzzle_out1);
     println!();
 
@@ -50,13 +61,13 @@ pub fn main() {
     println!("======");
     println!();
 
-    let test_out2 = do_part2(day03_input::TEST_INPUT.parse::<Input>().unwrap());
-    println!("Test output: {} (expected {})", test_out2, day03_input::TEST_RESULT_PART2);
-    assert_eq!(day03_input::TEST_RESULT_PART2, test_out2);
+    let test_out2 = do_part2(TEST_INPUT.parse::<Input>().unwrap());
+    println!("Test output: {} (expected {})", test_out2, TEST_RESULT_PART2);
+    assert_eq!(TEST_RESULT_PART2, test_out2);
 
     println!();
     println!("Running puzzle input...");
-    let puzzle_out2 = do_part2(day03_input::PUZZLE_INPUT.parse::<Input>().unwrap());
+    let puzzle_out2 = do_part2(std::fs::read_to_string("puzzles/day03_input.txt").unwrap().parse::<Input>().unwrap());
     println!("Puzzle result: {}", puzzle_out2);
     println!();
 }
