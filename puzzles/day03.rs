@@ -26,7 +26,7 @@ impl FromStr for Input {
 }
 
 pub fn main() {
-    dbgprint::enable();
+    //dbgprint::enable();
 
     println!("Advent of Code 2021");
     println!("Day 03 - Rucksack Reorganization");

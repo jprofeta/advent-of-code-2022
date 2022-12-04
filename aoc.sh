@@ -10,6 +10,12 @@ INPUT_TEMPLATE="templates/day_input.template.rs"
 
 #EXTERNS="--extern ndarray=deps/libndarray-4276025192ebc488.rlib"
 
+if [[ ${#DAY} == 1 ]]; then
+	DAY="0${DAY}"
+fi
+
+DAY_NO_LEADING=$(($DAY))
+
 if [[ "$ACTION" == "create" ]]; then
 	TOPIC="$3"
 	if [[ -z "$TOPIC" ]]; then
@@ -25,6 +31,7 @@ if [[ "$ACTION" == "create" ]]; then
 
 		sed -i -s -r "s/\\{\\{day\\}\\}/${DAY}/" "puzzles/day${DAY}.rs" "puzzles/day${DAY}_input.rs"
 		sed -i -s -r "s/\\{\\{topic\\}\\}/${TOPIC}/" "puzzles/day${DAY}.rs" "puzzles/day${DAY}_input.rs"
+		sed -i -s -r "s/(\\s+)\\/\\/ \\{\\{new_day\\}\\}/\\1${DAY_NO_LEADING} => puzzles::day${DAY}::main(),\\n\\0/" "main.rs"
 
 		echo "pub mod day${DAY};" >> puzzles.rs
 		echo "pub mod day${DAY}_input;" >> puzzles.rs
