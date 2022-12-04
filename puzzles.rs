@@ -7,3 +7,6 @@ pub mod day02_input;
 pub mod day03;
 pub mod day03_input;
 
+pub mod day04;
+pub mod day04_input;
+
