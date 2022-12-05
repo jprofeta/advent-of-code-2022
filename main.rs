@@ -17,6 +17,7 @@ pub fn main() {
         2 => puzzles::day02::main(),
         3 => puzzles::day03::main(),
         4 => puzzles::day04::main(),
+        5 => puzzles::day05::main(),
         // {{new_day}}
         _ => println!("Undefined day")
     }

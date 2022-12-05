@@ -17,12 +17,10 @@ pub const TEST_RESULT_PART1: i32 = 0;
 pub const TEST_RESULT_PART2: i32 = 0;
 
 #[derive(Debug)]
-struct InputError { }
-#[derive(Debug)]
 struct Input { }
 
 impl FromStr for Input {
-    type Err = InputError;
+    type Err = &'static str;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         
 
