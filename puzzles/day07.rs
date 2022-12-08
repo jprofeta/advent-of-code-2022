@@ -32,7 +32,7 @@ pub fn main() {
     //dbgprint::enable();
 
     println!("Advent of Code 2022");
-    println!("Day {{day}} - {{topic}}");
+    println!("Day 07 - No Space Left On Device");
     println!();
 
     println!("Part 1");
@@ -45,7 +45,7 @@ pub fn main() {
 
     println!();
     println!("Running puzzle input...");
-    let puzzle_out1 = do_part1(std::fs::read_to_string("puzzles/day{{day}}_input.txt").unwrap().parse::<Input>().unwrap());
+    let puzzle_out1 = do_part1(std::fs::read_to_string("puzzles/day07_input.txt").unwrap().parse::<Input>().unwrap());
     println!("Puzzle result: {}", puzzle_out1);
     println!();
 
@@ -59,7 +59,7 @@ pub fn main() {
 
     println!();
     println!("Running puzzle input...");
-    let puzzle_out2 = do_part2(std::fs::read_to_string("puzzles/day{{day}}_input.txt").unwrap().parse::<Input>().unwrap());
+    let puzzle_out2 = do_part2(std::fs::read_to_string("puzzles/day07_input.txt").unwrap().parse::<Input>().unwrap());
     println!("Puzzle result: {}", puzzle_out2);
     println!();
 }

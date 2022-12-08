@@ -2,6 +2,7 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 
+use std::collections::HashSet;
 use std::iter::FromIterator;
 use std::iter::IntoIterator;
 use std::str::FromStr;
@@ -10,21 +11,19 @@ use std::convert::TryInto;
 use crate::dbgprint;
 
 pub const TEST_INPUT: &str = "\
-
+mjqjpqmgbljsphdztnvjfqwrcgsmlb
 ";
 
-pub const TEST_RESULT_PART1: i32 = 0;
-pub const TEST_RESULT_PART2: i32 = 0;
+pub const TEST_RESULT_PART1: i32 = 7;
+pub const TEST_RESULT_PART2: i32 = 19;
 
 #[derive(Debug)]
-struct Input { }
+struct Input { data_stream: String }
 
 impl FromStr for Input {
     type Err = &'static str;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        
-
-        Ok(Input { })
+        Ok(Input { data_stream: String::from(s.trim()) })
     }
 }
 
@@ -32,7 +31,7 @@ pub fn main() {
     //dbgprint::enable();
 
     println!("Advent of Code 2022");
-    println!("Day {{day}} - {{topic}}");
+    println!("Day 06 - Tuning Trouble");
     println!();
 
     println!("Part 1");
@@ -45,7 +44,7 @@ pub fn main() {
 
     println!();
     println!("Running puzzle input...");
-    let puzzle_out1 = do_part1(std::fs::read_to_string("puzzles/day{{day}}_input.txt").unwrap().parse::<Input>().unwrap());
+    let puzzle_out1 = do_part1(std::fs::read_to_string("puzzles/day06_input.txt").unwrap().parse::<Input>().unwrap());
     println!("Puzzle result: {}", puzzle_out1);
     println!();
 
@@ -59,15 +58,41 @@ pub fn main() {
 
     println!();
     println!("Running puzzle input...");
-    let puzzle_out2 = do_part2(std::fs::read_to_string("puzzles/day{{day}}_input.txt").unwrap().parse::<Input>().unwrap());
+    let puzzle_out2 = do_part2(std::fs::read_to_string("puzzles/day06_input.txt").unwrap().parse::<Input>().unwrap());
     println!("Puzzle result: {}", puzzle_out2);
     println!();
 }
 
 fn do_part1(input: Input) -> i32 {
-    0
+    let marker = input.data_stream
+        .chars()
+        .collect::<Vec<_>>()
+        .windows(4)
+        .enumerate()
+        .find(|(i, window)| {
+            let mut window: Vec<char> = Vec::from_iter(window.iter().cloned());
+            window.sort();
+            window.dedup();
+            window.len() == 4
+        })
+        .unwrap()
+        .0;
+    (marker as i32) + 4
 }
 
 fn do_part2(input: Input) -> i32 {
-    0
+    let marker = input.data_stream
+        .chars()
+        .collect::<Vec<_>>()
+        .windows(14)
+        .enumerate()
+        .find(|(i, window)| {
+            let mut window: Vec<char> = Vec::from_iter(window.iter().cloned());
+            window.sort();
+            window.dedup();
+            window.len() == 14
+        })
+        .unwrap()
+        .0;
+    (marker as i32) + 14
 }

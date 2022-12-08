@@ -74,7 +74,7 @@ impl FromStr for Input {
 pub fn main() {
     dbgprint::enable();
 
-    println!("Advent of Code 2021");
+    println!("Advent of Code 2022");
     println!("Day 05 - Supply Stacks");
     println!();
 
@@ -111,8 +111,8 @@ fn do_part1(input: Input) -> String {
     let mut stacks = input.stacks.clone();
     for mv in input.moves {
         for _ in 0..mv.num {
-                let x = stacks[mv.src - 1].remove(0);
-                stacks[mv.dest - 1].insert(0, x)
+            let x = stacks[mv.src - 1].remove(0);
+            stacks[mv.dest - 1].insert(0, x)
         }
     }
 

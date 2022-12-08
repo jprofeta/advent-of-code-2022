@@ -96,7 +96,7 @@ impl TryFrom<OutValue> for Hand {
 pub fn main() {
     dbgprint::enable();
 
-    println!("Advent of Code 2021");
+    println!("Advent of Code 2022");
     println!("Day 02 - Rock Paper Scissors");
     println!();
 

@@ -39,7 +39,7 @@ impl FromStr for Input {
 pub fn main() {
     //dbgprint::enable();
 
-    println!("Advent of Code 2021");
+    println!("Advent of Code 2022");
     println!("Day 03 - Rucksack Reorganization");
     println!();
 
