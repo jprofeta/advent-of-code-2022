@@ -2,6 +2,12 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 
+use std::borrow::Borrow;
+use std::borrow::BorrowMut;
+use std::cell::Cell;
+use std::cell::RefCell;
+use std::cell::RefMut;
+use std::collections::HashMap;
 use std::iter::FromIterator;
 use std::iter::IntoIterator;
 use std::str::FromStr;
@@ -10,26 +16,88 @@ use std::convert::TryInto;
 use crate::dbgprint;
 
 pub const TEST_INPUT: &str = "\
-
+$ cd /
+$ ls
+dir a
+14848514 b.txt
+8504156 c.dat
+dir d
+$ cd a
+$ ls
+dir e
+29116 f
+2557 g
+62596 h.lst
+$ cd e
+$ ls
+584 i
+$ cd ..
+$ cd ..
+$ cd d
+$ ls
+4060174 j
+8033020 d.log
+5626152 d.ext
+7214296 k
 ";
 
-pub const TEST_RESULT_PART1: i32 = 0;
+pub const TEST_RESULT_PART1: i32 = 95437;
 pub const TEST_RESULT_PART2: i32 = 0;
 
+const START_OF_COMMAND: &str = "$ ";
+
 #[derive(Debug)]
-struct Input { }
+enum Command {
+    Cd,
+    Ls
+}
+
+#[derive(Debug)]
+struct Execution {
+    command: Command,
+    args: Vec<String>,
+    stdout: String
+}
+
+impl FromStr for Execution {
+    type Err = &'static str;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (cmd, stdout) = s.split_once(|c| (c == '\n') || (c == '\r')).expect("Needs a command followed by output.");
+        let (exe, args) = s.split_once(char::is_whitespace).expect("Needs an executable and arguments separated by a space.");
+        let command = match exe.trim().to_lowercase().as_str() {
+            "ls" => Command::Ls,
+            "cd" => Command::Cd,
+            x => { eprintln!("Unknown command: {}", x); return Err("Unknown command type") }
+        };
+        Ok(Execution {
+            command: command,
+            args: args.split(char::is_whitespace).map(String::from).collect(),
+            stdout: String::from(stdout)
+        })
+    }
+}
+
+#[derive(Debug)]
+struct Input { commands: Vec<Execution> }
 
 impl FromStr for Input {
     type Err = &'static str;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        
+        let s = String::from(s);
+        let commands: Vec<_> = 
+            s
+            .split(START_OF_COMMAND)
+            .filter(|s| !str::is_empty(s))
+            .map(Execution::from_str)
+            .map(|x| x.expect("Valid command execution"))
+            .collect();
 
-        Ok(Input { })
+        Ok(Input { commands: commands })
     }
 }
 
 pub fn main() {
-    //dbgprint::enable();
+    dbgprint::enable();
 
     println!("Advent of Code 2022");
     println!("Day 07 - No Space Left On Device");
@@ -64,9 +132,69 @@ pub fn main() {
     println!();
 }
 
-fn do_part1(input: Input) -> i32 {
-    0
+fn get_dir_size(file_entries: &HashMap<String, usize>, path: &String) -> usize {
+    file_entries
+    .iter()
+    .filter(|(k,v)| k.starts_with(path) & !k.ends_with("/"))
+    .map(|(k,v)| v).sum()
 }
+
+fn do_part1<'a>(input: Input) -> i32 {
+    let mut file_entries: HashMap<String, usize> = HashMap::new();
+    let mut path = String::from("");
+    for cmd in input.commands {
+        match cmd.command {
+            Command::Cd => {
+                match cmd.args[0].as_str() {
+                    // Both .. and / end a directory and cause it to have its size calculated, but the end location is different.
+                    ".." => {
+                        file_entries.insert(path.clone(), 0);
+                        
+                        let dir = &path[0..path.len() - 1];
+                        let last_slash_idx = dir.rfind("/").expect("At top of tree, cannot move up anymore.");
+                        path = dir[0..last_slash_idx + 1].to_string();
+                    },
+                    "/" => {
+                        file_entries.insert(path.clone(), 0);
+
+                        path = String::from("/");
+                    },
+                    dir => {
+                        path.push_str(dir);
+                        path.push_str("/");
+                    }
+                }
+                dbgprintln!("> {}", path);
+            },
+            Command::Ls => {
+                let listings: Vec<_> = cmd.stdout
+                    .lines()
+                    .map(|line| line.split_once(" ").expect("two values separated by space for file listing."))
+                    .map(|(a,b)| match a { "dir" => (b.to_string() + "/", 0), _ => (b.to_string(), a.parse::<usize>().expect("Valid file size")) })
+                    .collect();
+                for (item,size) in listings {
+                    let item_path = path.clone() + &item;
+                    file_entries.insert(item_path, size);
+                }
+            }
+        }
+    }
+
+    // Push the last path
+    let size = get_dir_size(&file_entries, &path);
+    file_entries.insert(path.clone(), size);
+
+    file_entries
+    .iter()
+    .inspect(|(path,size)| dbgprintln!("{}\t{:?}", path, size))
+    .filter(|(k,_)| k.ends_with("/"))
+    .map(|(k,_)| (k, get_dir_size(&file_entries, k)))
+    .inspect(|(path,size)| dbgprintln!("{}\t{:?}", path, size))
+    .map(|(_,v)| v as i32)
+    .filter(|size| size <= &100_000)
+    .sum()
+}
+
 
 fn do_part2(input: Input) -> i32 {
     0
