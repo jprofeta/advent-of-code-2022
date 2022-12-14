@@ -12,6 +12,7 @@ use std::iter::FromIterator;
 use std::iter::IntoIterator;
 use std::str::FromStr;
 use std::convert::TryInto;
+use std::string;
 
 use crate::dbgprint;
 
@@ -42,7 +43,7 @@ $ ls
 ";
 
 pub const TEST_RESULT_PART1: i32 = 95437;
-pub const TEST_RESULT_PART2: i32 = 0;
+pub const TEST_RESULT_PART2: i32 = 24933642;
 
 const START_OF_COMMAND: &str = "$ ";
 
@@ -139,10 +140,9 @@ fn get_dir_size(file_entries: &HashMap<String, usize>, path: &String) -> usize {
     .map(|(k,v)| v).sum()
 }
 
-fn do_part1<'a>(input: Input) -> i32 {
-    let mut file_entries: HashMap<String, usize> = HashMap::new();
+fn populate_listing(file_entries: &mut HashMap<String, usize>, commands: &Vec<Execution>) {
     let mut path = String::from("");
-    for cmd in input.commands {
+    for cmd in commands {
         match cmd.command {
             Command::Cd => {
                 match cmd.args[0].as_str() {
@@ -155,7 +155,9 @@ fn do_part1<'a>(input: Input) -> i32 {
                         path = dir[0..last_slash_idx + 1].to_string();
                     },
                     "/" => {
-                        file_entries.insert(path.clone(), 0);
+                        if path != "" {
+                            file_entries.insert(path.clone(), 0);
+                        }
 
                         path = String::from("/");
                     },
@@ -172,7 +174,7 @@ fn do_part1<'a>(input: Input) -> i32 {
                     .map(|line| line.split_once(" ").expect("two values separated by space for file listing."))
                     .map(|(a,b)| match a { "dir" => (b.to_string() + "/", 0), _ => (b.to_string(), a.parse::<usize>().expect("Valid file size")) })
                     .collect();
-                for (item,size) in listings {
+                for (item, size) in listings {
                     let item_path = path.clone() + &item;
                     file_entries.insert(item_path, size);
                 }
@@ -181,21 +183,54 @@ fn do_part1<'a>(input: Input) -> i32 {
     }
 
     // Push the last path
-    let size = get_dir_size(&file_entries, &path);
-    file_entries.insert(path.clone(), size);
+    file_entries.insert(path.clone(), 0);
+
+    // Push the root
+    file_entries.insert("/".to_string(), 0);
+
+    // Fill in the size for directories
+    let directories: Vec<_> = file_entries
+        .iter()
+        .filter(|(k,_)| k.ends_with("/"))
+        .map(|(k,_)| k.clone())
+        .collect();
+    
+    for dir in directories {
+        let size = get_dir_size(file_entries, &dir);
+        file_entries.insert(dir.clone(), size);
+    }
+}
+
+fn do_part1<'a>(input: Input) -> i32 {
+    let mut file_entries: HashMap<String, usize> = HashMap::new();
+    populate_listing(&mut file_entries, &input.commands);
 
     file_entries
     .iter()
     .inspect(|(path,size)| dbgprintln!("{}\t{:?}", path, size))
     .filter(|(k,_)| k.ends_with("/"))
-    .map(|(k,_)| (k, get_dir_size(&file_entries, k)))
     .inspect(|(path,size)| dbgprintln!("{}\t{:?}", path, size))
-    .map(|(_,v)| v as i32)
+    .map(|(_,v)| *v as i32)
     .filter(|size| size <= &100_000)
     .sum()
 }
 
+const FILESYSTEM_SIZE: usize = 70_000_000;
+const NEEDED_SPACE: usize = 30_000_000;
 
 fn do_part2(input: Input) -> i32 {
-    0
+    let mut file_entries: HashMap<String, usize> = HashMap::new();
+    populate_listing(&mut file_entries, &input.commands);
+
+    let total_used = file_entries.get("/").expect("Root element is required.");
+
+    let space_needed = NEEDED_SPACE - (FILESYSTEM_SIZE - total_used);
+    file_entries
+        .iter()
+        .filter(|(k,_)| k.ends_with("/"))
+        .map(|(_,v)| *v)
+        .filter(|size| size >= &space_needed)
+        .min()
+        .expect("Minimum largest directory.")
+        as i32
 }
